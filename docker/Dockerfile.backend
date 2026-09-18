@@ -1,0 +1,26 @@
+# Build Stage
+FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
+WORKDIR /app
+
+# Cache dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy source and build
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Runtime Stage
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+# Non-root user for security
+RUN addgroup -S devtools && adduser -S devtools -G devtools
+USER devtools:devtools
+
+COPY --from=builder /app/target/devtools-ai-backend-*.jar app.jar
+
+ENV SPRING_PROFILES_ACTIVE=prod
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-XX:+UseZGC", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]

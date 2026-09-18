@@ -1,0 +1,30 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Node / Frontend
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java / Maven / Backend
+target/
+*.class
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+
+# Local tools download
+tools/
+
+# Environment and Secrets
+.env
+.env.local
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

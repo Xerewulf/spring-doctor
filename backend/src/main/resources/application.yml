@@ -1,0 +1,46 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: devtools-ai-backend
+  profiles:
+    active: dev
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+# Application Custom Configuration
+devtools:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      expiration-ms: 86400000 # 24 hours
+  limits:
+    anonymous-daily-limit: 3
+    free-daily-limit: 10
+    pro-daily-limit: 250
+    max-error-input-characters: 32000
+  ai:
+    gemini:
+      api-key: ${GEMINI_API_KEY:}
+      model: ${GEMINI_MODEL:gemini-1.5-flash}
+      api-url: https://generativelanguage.googleapis.com/v1beta/models
+      timeout-seconds: 30
+      max-retries: 2
+    fallback-to-mock-if-no-key: true
+  cors:
+    allowed-origins:
+      - "http://localhost:5173"
+      - "http://localhost:3000"
+      - "http://127.0.0.1:5173"
+      - "http://localhost:80"
